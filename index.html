@@ -529,7 +529,7 @@
         // ============================================
 
         // 1. Tu clave PUBLICA de Stripe (empieza con pk_test_ o pk_live_)
-        const STRIPE_PUBLIC_KEY = 'pk_test_51U8BhRK8auhQTpDIz36zskMcvcNzgdnkS5rs0SQmdl7mAnvLbILlXHIiZQoABBpTqBdTKEXK4d1nv9qSqYaBcsFt00zAO4CUn5';
+        const STRIPE_PUBLIC_KEY = 'https://squishy-orbit.vercel.app/api/create-checkout-session';
 
         // 2. La URL de tu servidor en Vercel (la obtienes en el paso 4)
         const BACKEND_URL = 'https://squishy-orbit.vercel.app/api/create-checkout-session';
@@ -557,8 +557,8 @@
         function getStockText(stock) {
             if (stock <= 0) return '<span class="product-stock agotado">🚫 AGOTADO</span>';
             if (stock === 1) return '<span class="product-stock bajo">⚡ ¡Último disponible!</span>';
-            if (stock <= 3) return <span class="product-stock bajo">🔥 Quedan ${stock}</span>;
-            return <span class="product-stock">✅ Quedan ${stock}</span>;
+            if (stock <= 3) return `<span class="product-stock bajo">🔥 Quedan ${stock}</span>`;
+            return `<span class="product-stock">✅ Quedan ${stock}</span>`;
         }
 
         function renderProducts() {
@@ -576,7 +576,7 @@
                 if (p.variants.length > 0 && !isAgotado) {
                     variantHtml = `<select class="variant-select" id="variant-${p.id}" onchange="selectedVariants[${p.id}] = this.value">
                         <option value="">Elige color/variante</option>
-                        ${p.variants.map(v => <option value="${v}">${v}</option>).join('')}
+                        ${p.variants.map(v => `<option value="${v}">${v}</option>`).join('')}
                     </select>`;
                 }
 
@@ -586,7 +586,7 @@
                     <div class="product-name">${p.name}</div>
                     <div class="product-price">$${p.price} MXN</div>
                     ${getStockText(remaining)}
-                    ${p.detail ? <div class="product-detail">${p.detail}</div> : ''}
+                    ${p.detail ? `<div class="product-detail">${p.detail}</div>` : ''}
                     ${variantHtml}
                     ${!isAgotado && qtyInCart > 0 ? `
                         <div class="qty-control">
@@ -613,7 +613,7 @@
             }
 
             if (p.variants.length > 0) {
-                const selected = document.getElementById(variant-${id})?.value;
+                const selected = document.getElementById(`variant-${id}`)?.value;
                 if (!selected) {
                     alert('Por favor elige un color/variante primero 🎨');
                     return;
@@ -700,11 +700,11 @@
             Object.entries(cart).forEach(([id, qty]) => {
                 const p = products.find(x => x.id == id);
                 const variant = selectedVariants[id] ? ` [${selectedVariants[id]}]` : '';
-                msg += • ${p.emoji} ${p.name}${variant} x${qty} — $${p.price * qty}\n;
+                msg += `• ${p.emoji} ${p.name}${variant} x${qty} — $${p.price * qty}\n`;
                 total += p.price * qty;
             });
-            msg += \n💰 Subtotal: $${total} MXN\n\n¿Me confirmas disponibilidad y costo de envío? Gracias 🎀;
-            link.href = https://wa.me/529933963052?text=${encodeURIComponent(msg)};
+            msg += `\n💰 Subtotal: $${total} MXN\n\n¿Me confirmas disponibilidad y costo de envío? Gracias 🎀`;
+            link.href = `https://wa.me/529933963052?text=${encodeURIComponent(msg)}`;
         }
 
         // ============================================
@@ -734,7 +734,7 @@
                     const p = products.find(x => x.id == id);
                     const variant = selectedVariants[id] ? ` (${selectedVariants[id]})` : '';
                     lineItems.push({
-                        name: ${p.emoji} ${p.name}${variant},
+                        name: `${p.emoji} ${p.name}${variant}`,
                         price: p.price,
                         quantity: qty
                     });
