@@ -78,6 +78,8 @@
             border: 2px solid transparent;
             transition: all 0.25s ease;
             position: relative;
+            cursor: pointer;
+            overflow: hidden;
         }
         .product-card:hover {
             transform: translateY(-5px) scale(1.02);
@@ -87,6 +89,15 @@
         .product-card.agotado {
             opacity: 0.6;
             filter: grayscale(0.4);
+        }
+        .product-img-thumb {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: block;
+            background: #fce4ec;
         }
         .product-emoji { font-size: 2.4rem; margin-bottom: 6px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
         .product-name { color: #444; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; line-height: 1.25; min-height: 36px; display: flex; align-items: center; justify-content: center; }
@@ -105,6 +116,7 @@
             outline: none;
             font-family: inherit;
             background: white;
+            cursor: pointer;
         }
         .variant-select:focus { border-color: #c2185b; }
         .qty-control {
@@ -160,6 +172,13 @@
             font-weight: 700;
             transform: rotate(5deg);
             box-shadow: 0 2px 8px rgba(244,67,54,0.3);
+            z-index: 2;
+        }
+        .ver-mas {
+            font-size: 0.7rem;
+            color: #c2185b;
+            margin-top: 4px;
+            font-weight: 600;
         }
 
         .info-box {
@@ -205,6 +224,178 @@
         }
         .footer p { color: #aaa; font-size: 0.8rem; }
         .footer p.small { color: #ccc; font-size: 0.7rem; }
+
+        /* MODAL PRODUCTO (VISTA RÁPIDA) */
+        .product-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 150;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .product-modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 420px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+            position: relative;
+            animation: popIn 0.3s ease;
+        }
+        .product-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-modal-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 24px 24px 0 0;
+            background: #fce4ec;
+            display: block;
+        }
+        .product-modal-emoji {
+            font-size: 5rem;
+            text-align: center;
+            display: block;
+            padding: 40px 0;
+            background: linear-gradient(180deg, #fce4ec 0%, #fff 100%);
+            border-radius: 24px 24px 0 0;
+        }
+        .product-modal-body {
+            padding: 20px;
+        }
+        .product-modal-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .product-modal-price {
+            font-size: 1.6rem;
+            color: #c2185b;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .product-modal-detail {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .product-modal-stock {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .product-modal-variant {
+            margin-bottom: 16px;
+        }
+        .product-modal-variant label {
+            display: block;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .product-modal-variant select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #f8bbd0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+        .product-modal-variant select:focus { border-color: #c2185b; }
+        .product-modal-qty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .product-modal-qty button {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #fce4ec;
+            color: #c2185b;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .product-modal-qty button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .product-modal-qty span {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+            min-width: 30px;
+            text-align: center;
+        }
+        .product-modal-add {
+            background: linear-gradient(90deg, #c2185b, #ad1457);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(194,24,89,0.3);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .product-modal-add:hover { transform: scale(1.02); }
+        .product-modal-add:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .product-modal-add.added {
+            background: linear-gradient(90deg, #4caf50, #388e3c);
+        }
+        .product-modal-gallery {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 20px 12px;
+            margin-top: -10px;
+        }
+        .product-modal-gallery img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .product-modal-gallery img.active {
+            border-color: #c2185b;
+        }
 
         .modal-overlay {
             display: none;
@@ -410,6 +601,8 @@
             font-family: inherit;
         }
     </style>
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
     <div class="container">
@@ -460,13 +653,16 @@
         <div class="info-box">
             <h3>💳 ¿Cómo comprar?</h3>
             <ol>
-                <li>Agrega los squishies que quieras al carrito 🛒</li>
+                <li>Toca cualquier producto para ver sus fotos reales y detalles 📸</li>
+                <li>Elige color/variante si aplica 🎨</li>
+                <li>Agrega al carrito 🛒</li>
                 <li>Toca el carrito y elige: <b>"Pagar con tarjeta 💳"</b> o <b>"Pedir por WhatsApp"</b></li>
                 <li>Si pagas con tarjeta, se abre una página segura de Stripe 🔒</li>
-                <li>¡Listo! Recibirás confirmación por correo 📧</li>
+                <li>Te contactamos por WhatsApp con el <b>costo real del envío</b> (se paga aparte por transferencia)</li>
+                <li>¡Listo! Empacamos tu pedido con amor y te lo enviamos 💕</li>
             </ol>
             <div class="admin-nota">
-                <b>📢 Nota importante:</b> El stock se actualiza manualmente. Si acabas de vender algo, puede que la página aún muestre disponible. Te confirmamos todo por WhatsApp antes de enviar.
+                <b>📢 Nota importante:</b> El costo de envío <b>NO está incluido</b> en el pago con tarjeta. Te lo confirmamos por WhatsApp según tu dirección y lo pagas aparte por transferencia. El stock se actualiza manualmente.
             </div>
         </div>
 
@@ -476,7 +672,8 @@
             <p>
                 📦 Paquetería nacional (FedEx, DHL, Estafeta)<br>
                 ⏱️ 3-7 días hábiles<br>
-                🎁 Empaque kawaii de regalo incluido
+                🎁 Empaque kawaii de regalo incluido<br>
+                <b>💰 El costo de envío se cobra aparte</b> (te lo confirmamos por WhatsApp)
             </p>
         </div>
 
@@ -484,6 +681,34 @@
         <div class="footer">
             <p>💕 Squishy Orbit © 2026 — Hecho con amor</p>
             <p class="small">WhatsApp: 993 396 3052</p>
+        </div>
+    </div>
+
+    <!-- PRODUCT MODAL (VISTA RÁPIDA) -->
+    <div class="product-modal-overlay" id="product-modal" onclick="closeProductModalOnBackdrop(event)">
+        <div class="product-modal-content" onclick="event.stopPropagation()">
+            <button class="product-modal-close" onclick="closeProductModal()">✕</button>
+            <img id="pm-img" class="product-modal-img" src="" alt="" style="display:none;">
+            <div id="pm-emoji" class="product-modal-emoji" style="display:none;"></div>
+            <div class="product-modal-gallery" id="pm-gallery"></div>
+            <div class="product-modal-body">
+                <div class="product-modal-name" id="pm-name"></div>
+                <div class="product-modal-price" id="pm-price"></div>
+                <div class="product-modal-detail" id="pm-detail"></div>
+                <div class="product-modal-stock" id="pm-stock"></div>
+                <div class="product-modal-variant" id="pm-variant-box" style="display:none;">
+                    <label>Elige color / variante:</label>
+                    <select id="pm-variant-select" onchange="onModalVariantChange()">
+                        <option value="">-- Selecciona --</option>
+                    </select>
+                </div>
+                <div class="product-modal-qty">
+                    <button onclick="changeModalQty(-1)">−</button>
+                    <span id="pm-qty">1</span>
+                    <button onclick="changeModalQty(1)">+</button>
+                </div>
+                <button class="product-modal-add" id="pm-add-btn" onclick="addFromModal()">+ Agregar al carrito</button>
+            </div>
         </div>
     </div>
 
@@ -496,9 +721,17 @@
             </div>
             <div id="cart-items"></div>
             <div class="modal-footer">
-                <p class="modal-total">💰 Total: $<span id="modal-total">0</span> MXN</p>
+                <p class="modal-total">💰 Subtotal productos: $<span id="modal-total">0</span> MXN</p>
+                <p style="font-size:0.75rem; color:#ff9800; margin-bottom:8px;">📦 Envío aparte (te lo confirmamos por WhatsApp)</p>
                 <p class="modal-note">+ envío (te lo confirmamos por WhatsApp)</p>
 
+                <div style="background:#fff3e0; border-radius:12px; padding:10px; margin-bottom:10px; border-left:4px solid #ff9800;">
+                    <p style="color:#e65100; font-size:0.8rem; margin:0; line-height:1.4;">
+                        📢 <b>Importante:</b> El pago con tarjeta cubre solo los productos. 
+                        El costo de envío se te notificará por <b>WhatsApp</b> según tu dirección 
+                        y se paga aparte por transferencia.
+                    </p>
+                </div>
                 <button class="btn-stripe-big" id="btn-pagar-tarjeta" onclick="pagarCarrito()">
                     <span class="spinner"></span>
                     <span class="text">💳 Pagar con tarjeta</span>
@@ -527,23 +760,127 @@
         // ============================================
         // CONFIGURACIÓN - SOLO CAMBIA ESTAS 2 COSAS
         // ============================================
-
-        // 1. Tu clave PUBLICA de Stripe (empieza con pk_test_ o pk_live_)
         const STRIPE_PUBLIC_KEY = 'pk_test_51U8BhRK8auhQTpDIz36zskMcvcNzgdnkS5rs0SQmdl7mAnvLbILlXHIiZQoABBpTqBdTKEXK4d1nv9qSqYaBcsFt00zAO4CUn5';
-
-        // 2. La URL de tu servidor en Vercel (la obtienes en el paso 4)
         const BACKEND_URL = 'https://squishy-orbit.vercel.app/api/create-checkout-session';
 
         // ============================================
-        // PRODUCTOS (igual que antes)
+        // IMÁGENES POR PRODUCTO Y VARIANTE
+        // ============================================
+        const productImages = {
+            1: {
+                default: "https://i.imgur.com/9oUvtJI.jpeg",
+                gallery: [
+                    "https://i.imgur.com/9oUvtJI.jpeg"
+                ]
+            },
+            2: {
+                default: "https://i.imgur.com/J5UUmWE.jpeg",
+                gallery: [
+                    "https://i.imgur.com/J5UUmWE.jpeg"
+                ]
+            },
+            4: {
+                default: "https://i.imgur.com/2SH0ID2.jpeg",
+                gallery: [
+                    "https://i.imgur.com/2SH0ID2.jpeg"
+                ]
+            },
+            5: {
+                default: "https://i.imgur.com/iFISqSI.jpeg",
+                variants: {
+                    "Aguacate": "https://i.imgur.com/iFISqSI.jpeg",
+                    "Galleta": "https://i.imgur.com/WEfbLTg.jpeg",
+                    "Smores": "https://i.imgur.com/hbLq4f0.jpeg"
+                },
+                gallery: [
+                    "https://i.imgur.com/iFISqSI.jpeg",
+                    "https://i.imgur.com/X0XKIXn.jpeg",
+                    "https://i.imgur.com/WEfbLTg.jpeg",
+                    "https://i.imgur.com/RmxYM0z.jpeg",
+                    "https://i.imgur.com/hbLq4f0.jpeg",
+                    "https://i.imgur.com/cEgoVwc.jpeg"
+                ]
+            },
+            6: {
+                default: "https://i.imgur.com/uGpD29l.jpeg",
+                variants: {
+                    "Morado": "https://i.imgur.com/uGpD29l.jpeg",
+                    "Rosa": "https://i.imgur.com/KzDNF4S.jpeg",
+                    "Azul": "https://i.imgur.com/2cnSgxW.jpeg"
+                },
+                gallery: [
+                    "https://i.imgur.com/uGpD29l.jpeg",
+                    "https://i.imgur.com/KzDNF4S.jpeg",
+                    "https://i.imgur.com/2cnSgxW.jpeg"
+                ]
+            },
+            7: {
+                default: "https://i.imgur.com/FO10W66.jpeg",
+                variants: {
+                    "Azul (1 disp.)": "https://i.imgur.com/FO10W66.jpeg",
+                    "Rosa (2 disp.)": "https://i.imgur.com/y5fexwD.jpeg"
+                },
+                gallery: [
+                    "https://i.imgur.com/FO10W66.jpeg",
+                    "https://i.imgur.com/y5fexwD.jpeg"
+                ]
+            },
+            9: {
+                default: "https://i.imgur.com/kDU8uKV.jpeg",
+                gallery: [
+                    "https://i.imgur.com/kDU8uKV.jpeg"
+                ]
+            },
+            3: {
+                default: "https://i.imgur.com/rOXiPeB.jpeg",
+                variants: {
+                    "Rojo": "https://i.imgur.com/rOXiPeB.jpeg",
+                    "Morado": "https://i.imgur.com/Dzjv6Ec.jpeg",
+                    "Azul": "https://i.imgur.com/h7HrYoR.jpeg"
+                },
+                gallery: [
+                    "https://i.imgur.com/rOXiPeB.jpeg",
+                    "https://i.imgur.com/Dzjv6Ec.jpeg",
+                    "https://i.imgur.com/h7HrYoR.jpeg"
+                ]
+            },
+            8: {
+                default: "https://i.imgur.com/ucM87vU.jpeg",
+                gallery: [
+                    "https://i.imgur.com/ucM87vU.jpeg",
+                    "https://i.imgur.com/ObkLDo7.jpeg"
+                ]
+            },
+            10: {
+                default: "https://i.imgur.com/7tIv4So.jpeg",
+                variants: {
+                    "Naranja (4 disp.)": "https://i.imgur.com/7tIv4So.jpeg",
+                    "Rojo (3 disp.)": "https://i.imgur.com/QppxHFA.jpeg"
+                },
+                gallery: [
+                    "https://i.imgur.com/7tIv4So.jpeg",
+                    "https://i.imgur.com/QppxHFA.jpeg"
+                ]
+            },
+            11: {
+                default: "https://i.imgur.com/Pnss6jJ.jpeg",
+                gallery: [
+                    "https://i.imgur.com/Pnss6jJ.jpeg",
+                    "https://i.imgur.com/ivCPwYg.jpeg"
+                ]
+            }
+        };
+
+        // ============================================
+        // PRODUCTOS CON STOCK POR VARIANTE
         // ============================================
         const products = [
             { id: 1, name: "Perrito Squishy", price: 175, emoji: "🐕", bg: "#fff3e0", stock: 1, detail: "Nuevo ✨", variants: [] },
             { id: 2, name: "Party Slime Pizza", price: 175, emoji: "🍕", bg: "#fff8e1", stock: 1, detail: "Nuevo ✨", variants: [] },
-            { id: 3, name: "Squishy Glitter Gato", price: 150, emoji: "🐱", bg: "#f3e5f5", stock: 3, detail: "Glitter brillante ✨", variants: ["Morado", "Azul", "Rojo"] },
+            { id: 3, name: "Squishy Glitter Gato", price: 150, emoji: "🐱", bg: "#f3e5f5", stock: 3, detail: "Glitter brillante ✨", variants: ["Rojo", "Morado", "Azul"], variantStock: { "Rojo": 1, "Morado": 1, "Azul": 1 } },
             { id: 4, name: "Queso Squishy", price: 120, emoji: "🧀", bg: "#fffde7", stock: 5, detail: "", variants: [] },
-            { id: 5, name: "Mochis Comida", price: 150, emoji: "🍱", bg: "#e8f5e9", stock: 3, detail: "", variants: ["Smores", "Aguacate", "Galleta"] },
-            { id: 6, name: "Mochi Galleta", price: 150, emoji: "🍪", bg: "#efebe9", stock: 4, detail: "", variants: ["Morado", "Rosa", "Azul"] },
+            { id: 5, name: "Mochis Comida", price: 150, emoji: "🍱", bg: "#e8f5e9", stock: 3, detail: "", variants: ["Smores", "Aguacate", "Galleta"], variantStock: { "Smores": 1, "Aguacate": 1, "Galleta": 1 } },
+            { id: 6, name: "Mochi Galleta", price: 150, emoji: "🍪", bg: "#efebe9", stock: 4, detail: "", variants: ["Morado", "Rosa", "Azul"], variantStock: { "Morado": 1, "Rosa": 1, "Azul": 2 } },
             { id: 7, name: "Prime Squishy", price: 120, emoji: "🥤", bg: "#e3f2fd", stock: 3, detail: "", variants: ["Azul (1 disp.)", "Rosa (2 disp.)"] },
             { id: 8, name: "Helado Gigante Decorable", price: 300, emoji: "🍦", bg: "#e0f7fa", stock: 1, detail: "Blanco, cambia a rosa con el sol ☀️", variants: [] },
             { id: 9, name: "Mantequilla Squishy", price: 90, emoji: "🧈", bg: "#fff8e1", stock: 6, detail: "", variants: [] },
@@ -553,6 +890,10 @@
 
         let cart = {};
         let selectedVariants = {};
+        let cartVariantQty = {}; // { 3: { "Rojo": 1, "Azul": 1 } }
+        let modalProduct = null;
+        let modalQty = 1;
+        let modalSelectedVariant = "";
 
         function getStockText(stock) {
             if (stock <= 0) return '<span class="product-stock agotado">🚫 AGOTADO</span>';
@@ -561,56 +902,390 @@
             return `<span class="product-stock">✅ Quedan ${stock}</span>`;
         }
 
+        function getVariantStockRemaining(productId, variant) {
+            const p = products.find(x => x.id === productId);
+            if (!p || !p.variantStock || !variant) return p.stock - (cart[productId] || 0);
+            const variantCart = cartVariantQty[productId] || {};
+            return p.variantStock[variant] - (variantCart[variant] || 0);
+        }
+
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             products.forEach(p => {
                 const qtyInCart = cart[p.id] || 0;
-                const remaining = p.stock - qtyInCart;
-                const isAgotado = remaining <= 0;
+                const hasVariantStock = !!p.variantStock;
+                const selectedVar = selectedVariants[p.id] || '';
+
+                // Calcular remaining según si tiene stock por variante
+                let remaining;
+                if (hasVariantStock && selectedVar) {
+                    remaining = getVariantStockRemaining(p.id, selectedVar);
+                } else if (hasVariantStock) {
+                    remaining = -1; // Indica que necesita seleccionar variante
+                } else {
+                    remaining = p.stock - qtyInCart;
+                }
+
+                const isAgotado = !hasVariantStock ? remaining <= 0 : false;
+                const hasImages = productImages[p.id];
                 const card = document.createElement('div');
                 card.className = 'product-card' + (isAgotado ? ' agotado' : '');
                 card.style.background = p.bg;
+                card.onclick = (e) => {
+                    if (e.target.closest('button') || e.target.closest('select') || e.target.closest('.qty-control')) return;
+                    openProductModal(p.id);
+                };
+
+                // IMAGEN PRINCIPAL (o emoji si no hay foto)
+                let mediaHtml = '';
+                if (hasImages && hasImages.default) {
+                    mediaHtml = `<img src="${hasImages.default}" class="product-img-thumb" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">`;
+                } else {
+                    mediaHtml = `<div class="product-emoji">${p.emoji}</div>`;
+                }
 
                 let variantHtml = '';
-                if (p.variants.length > 0 && !isAgotado) {
-                    variantHtml = `<select class="variant-select" id="variant-${p.id}" onchange="selectedVariants[${p.id}] = this.value">
+                if (p.variants.length > 0) {
+                    variantHtml = `<select class="variant-select" id="variant-${p.id}" onchange="event.stopPropagation(); selectedVariants[${p.id}] = this.value; renderProducts();">
                         <option value="">Elige color/variante</option>
-                        ${p.variants.map(v => `<option value="${v}">${v}</option>`).join('')}
+                        ${p.variants.map(v => {
+                            const varRem = hasVariantStock ? getVariantStockRemaining(p.id, v) : p.stock;
+                            const disabled = hasVariantStock && varRem <= 0 ? 'disabled' : '';
+                            const label = hasVariantStock && varRem <= 0 ? `${v} (AGOTADO)` : v;
+                            return `<option value="${v}" ${selectedVar === v ? 'selected' : ''} ${disabled}>${label}</option>`;
+                        }).join('')}
                     </select>`;
+                }
+
+                // Stock text
+                let stockHtml = '';
+                if (hasVariantStock) {
+                    if (selectedVar) {
+                        stockHtml = `<div id="stock-${p.id}">${getStockText(remaining)}</div>`;
+                    } else {
+                        stockHtml = `<div id="stock-${p.id}" class="product-stock">🎨 Elige color para ver stock</div>`;
+                    }
+                } else {
+                    stockHtml = `<div id="stock-${p.id}">${getStockText(remaining)}</div>`;
+                }
+
+                // Qty control solo si hay items en carrito y no está agotado
+                let qtyControlHtml = '';
+                if (qtyInCart > 0 && !isAgotado) {
+                    qtyControlHtml = `
+                        <div class="qty-control" onclick="event.stopPropagation()">
+                            <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+                            <span class="qty-num">${qtyInCart}</span>
+                            <button class="qty-btn" onclick="changeQty(${p.id}, 1)" ${(!hasVariantStock && qtyInCart >= remaining) || (hasVariantStock && selectedVar && getVariantStockRemaining(p.id, selectedVar) <= 0) ? 'disabled' : ''}>+</button>
+                        </div>
+                    `;
+                }
+
+                // Botón agregar
+                let addDisabled = isAgotado;
+                let addText = isAgotado ? '🚫 Agotado' : (qtyInCart > 0 ? '✓ En carrito' : '+ Agregar al carrito');
+
+                if (hasVariantStock && selectedVar && getVariantStockRemaining(p.id, selectedVar) <= 0) {
+                    addDisabled = true;
+                    addText = '🚫 Agotado';
+                }
+                if (hasVariantStock && !selectedVar) {
+                    addDisabled = true;
+                    addText = 'Elige color primero 🎨';
                 }
 
                 card.innerHTML = `
                     ${isAgotado ? '<div class="agotado-badge">AGOTADO</div>' : ''}
-                    <div class="product-emoji">${p.emoji}</div>
+                    ${hasVariantStock && selectedVar && getVariantStockRemaining(p.id, selectedVar) <= 0 ? '<div class="agotado-badge">AGOTADO</div>' : ''}
+                    ${mediaHtml}
                     <div class="product-name">${p.name}</div>
                     <div class="product-price">$${p.price} MXN</div>
-                    ${getStockText(remaining)}
+                    ${stockHtml}
                     ${p.detail ? `<div class="product-detail">${p.detail}</div>` : ''}
                     ${variantHtml}
-                    ${!isAgotado && qtyInCart > 0 ? `
-                        <div class="qty-control">
-                            <button class="qty-btn" onclick="event.stopPropagation(); changeQty(${p.id}, -1)">−</button>
-                            <span class="qty-num">${qtyInCart}</span>
-                            <button class="qty-btn" onclick="event.stopPropagation(); changeQty(${p.id}, 1)" ${qtyInCart >= remaining ? 'disabled' : ''}>+</button>
-                        </div>
-                    ` : ''}
-                    <button class="add-btn ${qtyInCart > 0 ? 'added' : ''}" onclick="addToCart(${p.id})" ${isAgotado ? 'disabled' : ''}>
-                        ${isAgotado ? '🚫 Agotado' : (qtyInCart > 0 ? '✓ En carrito' : '+ Agregar al carrito')}
+                    ${qtyControlHtml}
+                    <button class="add-btn ${qtyInCart > 0 ? 'added' : ''}" onclick="event.stopPropagation(); addToCart(${p.id})" ${addDisabled ? 'disabled' : ''}>
+                        ${addText}
                     </button>
+                    <div class="ver-mas">👆 Toca para ver más fotos</div>
                 `;
                 grid.appendChild(card);
             });
         }
 
+        // ============================================
+        // MODAL DE PRODUCTO (VISTA RÁPIDA)
+        // ============================================
+        function openProductModal(productId) {
+            const p = products.find(x => x.id === productId);
+            if (!p) return;
+            modalProduct = p;
+            modalQty = 1;
+            modalSelectedVariant = selectedVariants[productId] || "";
+
+            const pm = document.getElementById('product-modal');
+            const imgEl = document.getElementById('pm-img');
+            const emojiEl = document.getElementById('pm-emoji');
+            const galleryEl = document.getElementById('pm-gallery');
+
+            const imgs = productImages[p.id];
+            if (imgs) {
+                let src = imgs.default;
+                if (modalSelectedVariant && imgs.variants && imgs.variants[modalSelectedVariant]) {
+                    src = imgs.variants[modalSelectedVariant];
+                }
+                imgEl.src = src;
+                imgEl.style.display = 'block';
+                imgEl.alt = p.name;
+                emojiEl.style.display = 'none';
+
+                galleryEl.innerHTML = '';
+                if (imgs.gallery && imgs.gallery.length > 1) {
+                    imgs.gallery.forEach((url, idx) => {
+                        const thumb = document.createElement('img');
+                        thumb.src = url;
+                        thumb.className = (url === src) ? 'active' : '';
+                        thumb.onclick = () => {
+                            imgEl.src = url;
+                            Array.from(galleryEl.children).forEach(c => c.classList.remove('active'));
+                            thumb.classList.add('active');
+                        };
+                        galleryEl.appendChild(thumb);
+                    });
+                } else {
+                    galleryEl.innerHTML = '';
+                }
+            } else {
+                imgEl.style.display = 'none';
+                emojiEl.style.display = 'block';
+                emojiEl.textContent = p.emoji;
+                galleryEl.innerHTML = '';
+            }
+
+            document.getElementById('pm-name').textContent = p.name;
+            document.getElementById('pm-price').textContent = `$${p.price} MXN`;
+            document.getElementById('pm-detail').textContent = p.detail || 'Squishy kawaii de alta calidad 💕';
+
+            updateModalStock();
+
+            const variantBox = document.getElementById('pm-variant-box');
+            const variantSelect = document.getElementById('pm-variant-select');
+            if (p.variants.length > 0) {
+                variantBox.style.display = 'block';
+                let options = '<option value="">-- Selecciona --</option>';
+                p.variants.forEach(v => {
+                    const rem = p.variantStock ? getVariantStockRemaining(p.id, v) : p.stock;
+                    const disabled = p.variantStock && rem <= 0 ? 'disabled' : '';
+                    const label = p.variantStock && rem <= 0 ? `${v} (AGOTADO)` : v;
+                    options += `<option value="${v}" ${modalSelectedVariant === v ? 'selected' : ''} ${disabled}>${label}</option>`;
+                });
+                variantSelect.innerHTML = options;
+            } else {
+                variantBox.style.display = 'none';
+            }
+
+            updateModalQtyUI();
+            updateModalAddButton();
+
+            pm.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateModalStock() {
+            if (!modalProduct) return;
+            const p = modalProduct;
+            let remaining;
+            if (p.variantStock && modalSelectedVariant) {
+                remaining = getVariantStockRemaining(p.id, modalSelectedVariant);
+            } else if (p.variantStock) {
+                remaining = -1;
+            } else {
+                remaining = p.stock - (cart[p.id] || 0);
+            }
+
+            if (p.variantStock && !modalSelectedVariant) {
+                document.getElementById('pm-stock').innerHTML = '<span class="product-stock">🎨 Elige color para ver stock</span>';
+            } else {
+                document.getElementById('pm-stock').innerHTML = getStockText(remaining);
+            }
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').style.display = 'none';
+            document.body.style.overflow = '';
+            modalProduct = null;
+        }
+
+        function closeProductModalOnBackdrop(e) {
+            if (e.target === document.getElementById('product-modal')) closeProductModal();
+        }
+
+        function onModalVariantChange() {
+            const select = document.getElementById('pm-variant-select');
+            modalSelectedVariant = select.value;
+
+            if (modalProduct && productImages[modalProduct.id]) {
+                const imgs = productImages[modalProduct.id];
+                const imgEl = document.getElementById('pm-img');
+                if (modalSelectedVariant && imgs.variants && imgs.variants[modalSelectedVariant]) {
+                    imgEl.src = imgs.variants[modalSelectedVariant];
+                    const galleryEl = document.getElementById('pm-gallery');
+                    Array.from(galleryEl.children).forEach((thumb, idx) => {
+                        thumb.classList.toggle('active', imgs.gallery[idx] === imgs.variants[modalSelectedVariant]);
+                    });
+                } else if (imgs.default) {
+                    imgEl.src = imgs.default;
+                }
+            }
+            updateModalStock();
+            updateModalAddButton();
+            updateModalQtyUI();
+        }
+
+        function changeModalQty(delta) {
+            if (!modalProduct) return;
+            const p = modalProduct;
+            let remaining;
+            if (p.variantStock && modalSelectedVariant) {
+                remaining = getVariantStockRemaining(p.id, modalSelectedVariant);
+            } else if (p.variantStock) {
+                remaining = 0;
+            } else {
+                remaining = p.stock - (cart[p.id] || 0);
+            }
+
+            const newQty = modalQty + delta;
+            if (newQty < 1) return;
+            if (newQty > remaining) {
+                alert('¡No hay más stock disponible!');
+                return;
+            }
+            modalQty = newQty;
+            updateModalQtyUI();
+        }
+
+        function updateModalQtyUI() {
+            document.getElementById('pm-qty').textContent = modalQty;
+            const p = modalProduct;
+            if (!p) return;
+            let remaining;
+            if (p.variantStock && modalSelectedVariant) {
+                remaining = getVariantStockRemaining(p.id, modalSelectedVariant);
+            } else if (p.variantStock) {
+                remaining = 0;
+            } else {
+                remaining = p.stock - (cart[p.id] || 0);
+            }
+            const btns = document.querySelectorAll('.product-modal-qty button');
+            if (btns[0]) btns[0].disabled = modalQty <= 1;
+            if (btns[1]) btns[1].disabled = modalQty >= remaining;
+        }
+
+        function updateModalAddButton() {
+            const btn = document.getElementById('pm-add-btn');
+            const p = modalProduct;
+            if (!p) return;
+
+            let remaining;
+            if (p.variantStock && modalSelectedVariant) {
+                remaining = getVariantStockRemaining(p.id, modalSelectedVariant);
+            } else if (p.variantStock) {
+                remaining = 0;
+            } else {
+                remaining = p.stock - (cart[p.id] || 0);
+            }
+            const inCart = cart[p.id] || 0;
+
+            if (remaining <= 0 && !p.variantStock) {
+                btn.disabled = true;
+                btn.textContent = '🚫 Agotado';
+                btn.classList.remove('added');
+                return;
+            }
+
+            if (p.variants.length > 0 && !modalSelectedVariant) {
+                btn.disabled = true;
+                btn.textContent = 'Elige una variante primero 🎨';
+                btn.classList.remove('added');
+                return;
+            }
+
+            if (p.variantStock && modalSelectedVariant && remaining <= 0) {
+                btn.disabled = true;
+                btn.textContent = '🚫 Agotado';
+                btn.classList.remove('added');
+                return;
+            }
+
+            btn.disabled = false;
+            if (inCart > 0) {
+                btn.textContent = `✓ Agregar más (${inCart} en carrito)`;
+                btn.classList.add('added');
+            } else {
+                btn.textContent = '+ Agregar al carrito';
+                btn.classList.remove('added');
+            }
+        }
+
+        function addFromModal() {
+            if (!modalProduct) return;
+            const p = modalProduct;
+            const currentQty = cart[p.id] || 0;
+
+            if (p.variants.length > 0 && !modalSelectedVariant) {
+                alert('Por favor elige un color/variante primero 🎨');
+                return;
+            }
+
+            if (p.variantStock) {
+                const remaining = getVariantStockRemaining(p.id, modalSelectedVariant);
+                if (remaining <= 0) {
+                    alert('¡No hay stock de esta variante!');
+                    return;
+                }
+                if (modalQty > remaining) {
+                    alert(`Solo quedan ${remaining} unidades de esta variante.`);
+                    return;
+                }
+            } else {
+                if (currentQty + modalQty > p.stock) {
+                    alert('¡No hay suficiente stock!');
+                    return;
+                }
+            }
+
+            if (modalSelectedVariant) {
+                selectedVariants[p.id] = modalSelectedVariant;
+            }
+
+            cart[p.id] = currentQty + modalQty;
+
+            if (p.variantStock) {
+                if (!cartVariantQty[p.id]) cartVariantQty[p.id] = {};
+                cartVariantQty[p.id][modalSelectedVariant] = (cartVariantQty[p.id][modalSelectedVariant] || 0) + modalQty;
+            }
+
+            updateCartUI();
+            renderProducts();
+            updateModalAddButton();
+            updateModalQtyUI();
+            updateModalStock();
+
+            const btn = document.getElementById('pm-add-btn');
+            btn.textContent = '✓ ¡Agregado!';
+            btn.classList.add('added');
+            setTimeout(() => {
+                updateModalAddButton();
+            }, 1200);
+        }
+
+        // ============================================
+        // CARRITO
+        // ============================================
         function addToCart(id) {
             const p = products.find(x => x.id === id);
             const currentQty = cart[id] || 0;
-
-            if (currentQty >= p.stock) {
-                alert('¡Ups! No hay suficiente stock de este producto.');
-                return;
-            }
 
             if (p.variants.length > 0) {
                 const selected = document.getElementById(`variant-${id}`)?.value;
@@ -619,9 +1294,30 @@
                     return;
                 }
                 selectedVariants[id] = selected;
-            }
 
-            cart[id] = currentQty + 1;
+                if (p.variantStock) {
+                    const remaining = getVariantStockRemaining(id, selected);
+                    if (remaining <= 0) {
+                        alert('¡Ups! Esta variante está agotada.');
+                        return;
+                    }
+                    cart[id] = currentQty + 1;
+                    if (!cartVariantQty[id]) cartVariantQty[id] = {};
+                    cartVariantQty[id][selected] = (cartVariantQty[id][selected] || 0) + 1;
+                } else {
+                    if (currentQty >= p.stock) {
+                        alert('¡Ups! No hay suficiente stock de este producto.');
+                        return;
+                    }
+                    cart[id] = currentQty + 1;
+                }
+            } else {
+                if (currentQty >= p.stock) {
+                    alert('¡Ups! No hay suficiente stock de este producto.');
+                    return;
+                }
+                cart[id] = currentQty + 1;
+            }
             updateCartUI();
             renderProducts();
         }
@@ -629,18 +1325,51 @@
         function changeQty(id, delta) {
             const p = products.find(x => x.id === id);
             const currentQty = cart[id] || 0;
-            const newQty = currentQty + delta;
 
-            if (delta > 0 && newQty > p.stock) {
-                alert('¡No hay más stock disponible!');
-                return;
-            }
+            if (p.variantStock) {
+                const selected = selectedVariants[id] || document.getElementById(`variant-${id}`)?.value;
+                if (!selected) {
+                    alert('Por favor elige una variante primero 🎨');
+                    return;
+                }
+                selectedVariants[id] = selected;
 
-            if (newQty <= 0) {
-                delete cart[id];
-                delete selectedVariants[id];
+                if (delta > 0) {
+                    const remaining = getVariantStockRemaining(id, selected);
+                    if (remaining <= 0) {
+                        alert('¡No hay más stock disponible de esta variante!');
+                        return;
+                    }
+                    cart[id] = currentQty + 1;
+                    if (!cartVariantQty[id]) cartVariantQty[id] = {};
+                    cartVariantQty[id][selected] = (cartVariantQty[id][selected] || 0) + 1;
+                } else {
+                    const variantCart = cartVariantQty[id] || {};
+                    if ((variantCart[selected] || 0) <= 0) return;
+
+                    variantCart[selected]--;
+                    cart[id] = currentQty - 1;
+
+                    if (variantCart[selected] <= 0) delete variantCart[selected];
+                    if (Object.keys(variantCart).length === 0) delete cartVariantQty[id];
+
+                    if (cart[id] <= 0) {
+                        delete cart[id];
+                        delete selectedVariants[id];
+                    }
+                }
             } else {
-                cart[id] = newQty;
+                const newQty = currentQty + delta;
+                if (delta > 0 && newQty > p.stock) {
+                    alert('¡No hay más stock disponible!');
+                    return;
+                }
+                if (newQty <= 0) {
+                    delete cart[id];
+                    delete selectedVariants[id];
+                } else {
+                    cart[id] = newQty;
+                }
             }
             updateCartUI();
             renderProducts();
@@ -649,6 +1378,7 @@
         function removeFromCart(id) {
             delete cart[id];
             delete selectedVariants[id];
+            delete cartVariantQty[id];
             updateCartUI();
             renderProducts();
         }
@@ -670,12 +1400,19 @@
             } else {
                 itemsDiv.innerHTML = Object.entries(cart).map(([id, qty]) => {
                     const p = products.find(x => x.id == id);
-                    const variant = selectedVariants[id] ? ` (${selectedVariants[id]})` : '';
+                    let variantText = '';
+                    if (cartVariantQty[id] && p.variantStock) {
+                        variantText = Object.entries(cartVariantQty[id])
+                            .map(([v, q]) => `${v} x${q}`).join(', ');
+                        variantText = ` (${variantText})`;
+                    } else if (selectedVariants[id]) {
+                        variantText = ` (${selectedVariants[id]})`;
+                    }
                     return `<div class="cart-item">
                         <div class="cart-item-info">
                             <span class="cart-item-emoji">${p.emoji}</span>
                             <div>
-                                <div class="cart-item-name">${p.name}${variant}</div>
+                                <div class="cart-item-name">${p.name}${variantText}</div>
                                 <div class="cart-item-detail">$${p.price} c/u x ${qty}</div>
                             </div>
                         </div>
@@ -699,8 +1436,15 @@
             let total = 0;
             Object.entries(cart).forEach(([id, qty]) => {
                 const p = products.find(x => x.id == id);
-                const variant = selectedVariants[id] ? ` [${selectedVariants[id]}]` : '';
-                msg += `• ${p.emoji} ${p.name}${variant} x${qty} — $${p.price * qty}\n`;
+                let variantText = '';
+                if (cartVariantQty[id] && p.variantStock) {
+                    variantText = Object.entries(cartVariantQty[id])
+                        .map(([v, q]) => `${v} x${q}`).join(', ');
+                    variantText = ` [${variantText}]`;
+                } else if (selectedVariants[id]) {
+                    variantText = ` [${selectedVariants[id]}]`;
+                }
+                msg += `• ${p.emoji} ${p.name}${variantText} — $${p.price * qty}\n`;
                 total += p.price * qty;
             });
             msg += `\n💰 Subtotal: $${total} MXN\n\n¿Me confirmas disponibilidad y costo de envío? Gracias 🎀`;
@@ -708,7 +1452,7 @@
         }
 
         // ============================================
-        // PAGO CON TARJETA - CARRITO COMPLETO
+        // PAGO CON TARJETA
         // ============================================
         async function pagarCarrito() {
             const btn = document.getElementById('btn-pagar-tarjeta');
@@ -718,7 +1462,6 @@
                 return;
             }
 
-            // Verificar que esté configurado
             if (STRIPE_PUBLIC_KEY.includes('REEMPLAZA') || BACKEND_URL.includes('TU-PROYECTO')) {
                 alert('⚠️ Aún no has configurado Stripe y Vercel.\n\nSigue las instrucciones del archivo INSTRUCCIONES_VERCEL.txt');
                 return;
@@ -728,19 +1471,24 @@
             btn.disabled = true;
 
             try {
-                // Preparar items del carrito
                 const lineItems = [];
                 Object.entries(cart).forEach(([id, qty]) => {
                     const p = products.find(x => x.id == id);
-                    const variant = selectedVariants[id] ? ` (${selectedVariants[id]})` : '';
+                    let variantText = '';
+                    if (cartVariantQty[id] && p.variantStock) {
+                        variantText = Object.entries(cartVariantQty[id])
+                            .map(([v, q]) => `${v} x${q}`).join(', ');
+                        variantText = ` (${variantText})`;
+                    } else if (selectedVariants[id]) {
+                        variantText = ` (${selectedVariants[id]})`;
+                    }
                     lineItems.push({
-                        name: `${p.emoji} ${p.name}${variant}`,
+                        name: `${p.emoji} ${p.name}${variantText}`,
                         price: p.price,
                         quantity: qty
                     });
                 });
 
-                // Enviar al servidor
                 const response = await fetch(BACKEND_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -753,8 +1501,6 @@
                 }
 
                 const { url } = await response.json();
-
-                // Redirigir a Stripe Checkout
                 window.location.href = url;
 
             } catch (err) {
@@ -764,13 +1510,13 @@
             }
         }
 
-        // Verificar si volvimos de un pago exitoso
         function checkPaymentSuccess() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
                 document.getElementById('success-modal').style.display = 'flex';
                 cart = {};
                 selectedVariants = {};
+                cartVariantQty = {};
                 updateCartUI();
                 renderProducts();
                 window.history.replaceState({}, document.title, window.location.pathname);
